@@ -37,32 +37,32 @@ Description
 
 The currently available files are:
 
- (1) modechord.tar.gz, including the following directories:
+(1) modechord.tar.gz, including the following directories:
 
-   - ``cosmomc/`` - sample files for running CosmoMC with ModeCode + PolyChord
+- ``cosmomc/`` - sample files for running CosmoMC with ModeCode + PolyChord
 
-   - ``cosmomc/camb/`` - sample driver for standalone code 
-     (``driver_modpk.f90``), new files used by ModeChord, and modified CAMB files
+- ``cosmomc/camb/`` - sample driver for standalone code 
+  (``driver_modpk.f90``), new files used by ModeChord, and modified CAMB files
 
-   - ``cosmomc/source/`` - modified CosmoMC code
+- ``cosmomc/source/`` - modified CosmoMC code
 
-   - ``cosmomc/Models/*/`` - files for running CosmoMC with the PolyChord
-     sampler for the models included in ModeChord (note that
-     additional models can be easily added as described below), where
-     ``*`` = m2phi2 (quadratic potential), lphi4 (quartic), neq1 (n=1),
-     neq2ov3 (n=2/3), natural, hilltop, higgs (Higgs
-     inflation/Starobinsky model), monodromy (different versions of
-     the model) and reconstruction (Hubble slow-roll reconstruction). 
+- ``cosmomc/Models/*/`` - files for running CosmoMC with the PolyChord
+  sampler for the models included in ModeChord (note that
+  additional models can be easily added as described below), where
+  ``*`` = m2phi2 (quadratic potential), lphi4 (quartic), neq1 (n=1),
+  neq2ov3 (n=2/3), natural, hilltop, higgs (Higgs
+  inflation/Starobinsky model), monodromy (different versions of
+  the model) and reconstruction (Hubble slow-roll reconstruction). 
 
-   - ``cosmomc/batch2/`` - directory for storing generic input files for
-     ModeChord.  these additional files are accessed via test.ini and
-     files in ``Models/*/`` . In addition, ``batch2/params_CMB_defaults.ini``
-     is modified to have narrower priors on cosmological parameters,
-     and to include default prior widths for ModeCode's additional
-     V(phi) parameters.
+- ``cosmomc/batch2/`` - directory for storing generic input files for
+  ModeChord.  these additional files are accessed via test.ini and
+  files in ``Models/*/`` . In addition, ``batch2/params_CMB_defaults.ini``
+  is modified to have narrower priors on cosmological parameters,
+  and to include default prior widths for ModeCode's additional
+  V(phi) parameters.
 
-   - ``cosmomc/data/camspec.paramnames`` - paramnames file for using
-     Planck 2013 likelihoods.
+- ``cosmomc/data/camspec.paramnames`` - paramnames file for using
+  Planck 2013 likelihoods.
 
 As usual, ``*.tar.gz`` files can be unzipped and extracted using the command 
 ``tar -xzvf *.tar.gz``.
@@ -134,10 +134,10 @@ ModeCode options:
 -----------------
 
 - use_modpk (logical): a general flag to turn ModeCode on or off. 
-Setting use_modpk=F recovers the original functionality of CAMB/CosmoMC 
-while retaining the PolyChord sampler. When running the code with 
-use_modpk=F, ParamNamesFile in params_modpk.ini should be changed to 
-params_modpk_F.paramnames.
+  Setting use_modpk=F recovers the original functionality of CAMB/CosmoMC 
+  while retaining the PolyChord sampler. When running the code with 
+  use_modpk=F, ParamNamesFile in params_modpk.ini should be changed to 
+  params_modpk_F.paramnames.
 
 - modpk_physical_priors (logical) Excludes models where the scalar
   spectral amplitude is vastly different from the observed
@@ -244,8 +244,7 @@ Hubble slow-roll parameters (epsilon, eta, xi, ...), and H_star sets the
 overall energy scale.
 
 The corresponding potential is then given by:
-V(phi) = M_pl^2 H_star^2 [3(1 + A_1 phi + ... + A_N phi^N)^2
-         - 2(A_1 + ... + N A_N phi^(N-1))]
+V(phi) = M_pl^2 H_star^2 [3(1 + A_1 phi + ... + A_N phi^N)^2 - 2(A_1 + ... + N A_N phi^(N-1))]
 
 At the moment, the HSR potential is implemented in ModeCode for the 
 first three HSR parameters, i.e. epsilon, eta and xi. However, the 
@@ -257,8 +256,6 @@ log priors on epsilon, one can choose between:
       vparams(2) = eta
       vparams(3) = xi
       vparams(4) = log(10^10 A_SR)
-
- and
 
 - potential_choice = 8: HSR with eps, eta, xi
       vparams(1) = log_10(epsilon)
@@ -281,19 +278,19 @@ horizon still during inflation is given by infl_max_k.
 In summary, the parameters needed for the HSR reconstruction are:
 
 - infl_pivot_k (real): specifies the mode which exits the horizon when 
-      phi=0, in Mpc^{-1}. In addition, derived parameters like the spectral
-      tilt or the tensor-to-scalar ratio etc. are evaluated at this scale.
-      Note that this parameter is named k_pivot, when ModeCode is called with 
-      CAMB instead of CosmoMC/PolyChord.
+  phi=0, in Mpc^{-1}. In addition, derived parameters like the spectral
+  tilt or the tensor-to-scalar ratio etc. are evaluated at this scale.
+  Note that this parameter is named k_pivot, when ModeCode is called with 
+  CAMB instead of CosmoMC/PolyChord.
 
 - infl_min_k (real):  largest scale for which one requires that it exits 
-      the horizon during inflation, in Mpc^{-1}.
+  the horizon during inflation, in Mpc^{-1}.
 
 - infl_max_k (real):  smallest scale for which one requires that it exits 
-      the horizon during inflation, in Mpc^{-1}.
+  the horizon during inflation, in Mpc^{-1}.
 
 - reconstruction_Nefold_limit (real): minimum number of inflationary
-      e-folds counted from infl_min_k.
+  e-folds counted from infl_min_k.
 
 
 Computing power spectra (standalone code)
@@ -373,23 +370,23 @@ The chain files output by the ModeChord version of CosmoMC have several
 additional derived parameters which are listed at the end of 
 params_modpk.paramnames:
 
-  - modpk_Npivot; if instreheat=F, this should always be equal to the 
-    chain parameter N_pivot, but if instreheat=T it will be the value of 
-    N_pivot computed by the code to satisfy the matching equation for 
-    instant reheating models. Note that for HSR reconstruction this value
-    is meaningless.
+- modpk_Npivot; if instreheat=F, this should always be equal to the 
+  chain parameter N_pivot, but if instreheat=T it will be the value of 
+  N_pivot computed by the code to satisfy the matching equation for 
+  instant reheating models. Note that for HSR reconstruction this value
+  is meaningless.
 
-  - modpk_ns, modpk_nt (scalar and tensor spectral tilt)
+- modpk_ns, modpk_nt (scalar and tensor spectral tilt)
 
-  - modpk_nrun (scalar spectral running dn_s/dlnk)
+- modpk_nrun (scalar spectral running dn_s/dlnk)
 
-  - modpk_logA (ln(10^{10}A_s), i.e. the usual CosmoMC scalar amplitude 
-    parameter)
+- modpk_logA (ln(10^{10}A_s), i.e. the usual CosmoMC scalar amplitude 
+  parameter)
 
-  - modpk_r (tensor-to-scalar ratio)
+- modpk_r (tensor-to-scalar ratio)
 
-  - modpk_w Effective primordial equation of state parameter (see 
-    arXiv:1112.0326 for details)
+- modpk_w Effective primordial equation of state parameter (see 
+  arXiv:1112.0326 for details)
 
 Each of these spectral parameters is computed directly from the 
 primordial power spectra computed by ModeCode at the pivot scale.
@@ -410,16 +407,16 @@ Single field inflationary models beyond those provided can be simply
 added to ModeCode by adding the following functions to 
 camb/modpk_potential.f90:
 
-  - V(phi) in the function pot(phi)
+- V(phi) in the function pot(phi)
 
-  - the first derivative of V in the function dVdphi(phi)
+- the first derivative of V in the function dVdphi(phi)
 
-  - the second derivative of V in the function d2Vdphi2(phi)
+- the second derivative of V in the function d2Vdphi2(phi)
 
-  - an approximate expression for phi(N_pivot) (e.g., derived using slow 
-    roll relations) in the function initialphi; this is used to compute a 
-    reasonable first guess for the initial conditions given the shape of 
-    the potential
+- an approximate expression for phi(N_pivot) (e.g., derived using slow 
+  roll relations) in the function initialphi; this is used to compute a 
+  reasonable first guess for the initial conditions given the shape of 
+  the potential
 
 Although only specification of V(phi) is absolutely necessary (with 
 vnderivs=T the code will attempt to compute numerical derivatives of the 
