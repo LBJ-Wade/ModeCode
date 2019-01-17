@@ -1,6 +1,9 @@
 ModeCode
 ========
 
+.. image:: https://travis-ci.org/ucl-cosmoparticles/ModeCode.svg?branch=master
+    :target: https://travis-ci.org/ucl-cosmoparticles/ModeCode
+
 ReadMe for ModeChord -- PolyChord enabled version of ModeCode.
 
 November 2016.
