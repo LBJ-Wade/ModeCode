@@ -80,8 +80,7 @@ require adding the downloaded files to an existing copy of the basic
 CAMB and CosmoMC codes.
 
 In each of the modified files, changes to the original code are marked 
-by 'MODIFIED P(K) ... END MODIFIED P(K)' or 'MODIFIED POLYCHORD ...
-END MODIFIED POLYCHORD' so that they can be easily located.
+by 'MODIFIED P(K) ... END MODIFIED P(K)' so that they can be easily located.
 
 ==== Setting up and compiling ModeChord ====
 
@@ -345,7 +344,7 @@ unchanged from the original version of the code.
 
 ModeCode-specific options have been added to the test.ini and
 batch2/params_CBM_defaults.ini files. These are marked by 'MODIFIED
-P(K)' and 'MODIFIED POLYCHORD'. 
+P(K)'. 
 
 As a sampler PolyChord is parallelised via a master-slave structure.
 This means that it runs optimally in pure MPI (i.e. with no openMP
