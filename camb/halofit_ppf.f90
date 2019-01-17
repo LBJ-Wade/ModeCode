@@ -140,7 +140,9 @@
                 else if (xlogr2>3.4999) then
                     ! Totally crazy non-linear
                     global_error_flag=349
-                    write(*,*) 'Error in halofit'
+!MODIFIED POLYCHORD
+                    !write(*,*) 'Error in halofit'
+!END MODIFIED POLYCHORD
                     goto 101
                 end if
             end do

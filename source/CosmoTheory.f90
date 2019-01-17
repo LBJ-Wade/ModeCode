@@ -31,6 +31,23 @@
         !MPK%nx = num_k, MPK%ny = num_z
         type(TCosmoTheoryPK), allocatable :: MPK
         type(TCosmoTheoryPK), allocatable :: NL_MPK
+!MODIFIED P(K)
+        ! Amplitude, tilt and running parameters evaluated exactly at the pivot scale
+        real(mcp) :: modpk_N_pivot ! Number of efolds 
+        real(mcp) :: modpk_ns      ! scalar tilt
+        real(mcp) :: modpk_nt      ! tensor tilt
+        real(mcp) :: modpk_nrun    ! scalar running
+        real(mcp) :: modpk_As      ! scalar amplitude
+        real(mcp) :: modpk_r       ! tensor to scalar amplitude ratio
+
+        real(mcp) :: modpk_ns002
+        real(mcp) :: modpk_nt002
+        real(mcp) :: modpk_nrun002
+        real(mcp) :: modpk_As002
+        real(mcp) :: modpk_r002
+
+        real(mcp) :: modpk_w       ! effective equation of state parameter
+!END MODIFIED P(K)
         type(TCosmoTheoryPK), allocatable :: MPK_WEYL
         type(TCosmoTheoryPK), allocatable :: NL_MPK_WEYL
         type(TCubicSpline),  allocatable :: growth_z !defined as sigma8_vd^2/sigma8

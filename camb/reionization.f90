@@ -282,6 +282,9 @@
     end function Reionization_GetOptDepth
 
     subroutine Reionization_zreFromOptDepth(Reion, ReionHist)
+!MODIFIED POLYCHORD
+    use errors
+!END MODIFIED POLYCHORD
     !General routine to find zre parameter given optical depth
     Type(ReionizationParams) :: Reion
     Type(ReionizationHistory) :: ReionHist
@@ -304,7 +307,13 @@
             try_b = Reion%redshift
         end if
         if (abs(try_b - try_t) < 2e-3/Reionization_AccuracyBoost) exit
-        if (i>100) call mpiStop('Reionization_zreFromOptDepth: failed to converge')
+!MODIFIED POLYCHORD
+        !if (i>100) call mpiStop('Reionization_zreFromOptDepth: failed to converge')
+        if (i>100) then
+            global_error_flag = 1
+            exit
+        end if
+!END MODIFIED POLYCHORD
     end do
 
 

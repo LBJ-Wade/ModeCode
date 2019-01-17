@@ -31,6 +31,9 @@
     use Reionization
     use Recombination
     use Errors
+!MODIFIED_P(K)
+    use modpkparams, only : potential_choice
+!END MODIFIED P(K)
 
     implicit none
     public
@@ -763,7 +766,36 @@
         lSet%l(1:lind) = ls(1:lind)
         return
     end if
+    
+!MODIFIED P(K)
+!For potential_choice = monodromy, do all \ell up to \ell=300, then up to \ell=700 in steps of 2, then up to 1192 in steps of 4, then up to max_l in steps of 8.  
+    if (potential_choice.eq.9.or.potential_choice.eq.10.or.potential_choice.eq.11.or.potential_choice.eq.13) then
+        lind=0
+        do lvar=lmin,min(300,max_l)
+            lind=lind+1
+            ls(lind)=lvar
+        end do
+        step=2
+        do lvar=302,min(700,max_l),step 
+            lind=lind+1
+            ls(lind)=lvar
+        end do
+        step=4
+        do lvar=704,min(1192,max_l),step
+            lind=lind+1
+            ls(lind)=lvar
+        end do
+        step=8
+        do lvar=1200, max_l,step
+            lind=lind+1
+            ls(lind)=lvar
+        end do
+        lSet%l0=lind
+        lSet%l(1:lind) = ls(1:lind)
+        return
+    end if
 
+!END MODIFIED P(K)
     lind=0
     do lvar=lmin, 10
         lind=lind+1

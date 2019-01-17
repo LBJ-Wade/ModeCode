@@ -214,9 +214,11 @@
             CTE(l) =  Cl_scalar(l,in,C_Cross)*fac
         end do
         if (Cphil3(10) > 1e-7) then
-            write (*,*) 'You need to normalize realistically to use lensing.'
-            write (*,*) 'see http://cosmocoffee.info/viewtopic.php?t=94'
-            call MpiStop()
+!MODIFIED POLYCHORD
+            !write (*,*) 'You need to normalize realistically to use lensing.'
+            !write (*,*) 'see http://cosmocoffee.info/viewtopic.php?t=94'
+            !call MpiStop()
+!END MODIFIED POLYCHORD
         end if
         if (lmax > CP%Max_l) then
             l=CP%Max_l
@@ -232,7 +234,9 @@
                 CEE(l) =  highL_CL_template(l, C_E)*fac2 *sc
                 CTE(l) =  highL_CL_template(l, C_Cross)*fac2*sc
                 if (Cphil3(CP%Max_l+1) > 1e-7) then
-                    call MpiStop('You need to normalize the high-L template so it is dimensionless')
+!MODIFIED POLYCHORD
+                    !call MpiStop('You need to normalize the high-L template so it is dimensionless')
+!END MODIFIED POLYCHORD
                 end if
             end do
         end if
@@ -755,9 +759,11 @@
 
     RR = RR/2/fourpi
     if (RR(1) > 1e-5) then
-        write (*,*) 'You need to normalize realistically to use lensing.'
-        write (*,*) 'see http://cosmocoffee.info/viewtopic.php?t=94'
-        call MpiStop()
+!MODIFIED POLYCHORD
+        !write (*,*) 'You need to normalize realistically to use lensing.'
+        !write (*,*) 'see http://cosmocoffee.info/viewtopic.php?t=94'
+        !call MpiStop()
+!END MODIFIED POLYCHORD
     end if
     if (maxl > lmax_donelnfa) then
         !Get ln factorials
