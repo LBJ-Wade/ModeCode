@@ -1229,7 +1229,14 @@
 
     qmax_int = min(qmax,max_bessels_etak/CP%tau0)
 
+!MODIFIED P(K)
+#ifdef WIGGLY
+    ! This is a significant speed hit.  Shouldn't generally be turned to less than 1.5
+    IntSampleBoost=AccuracyBoost*5d0 
+#else
     IntSampleBoost=AccuracyBoost
+#endif
+!END MODIFIED P(K)
     if (do_bispectrum) then
         IntSampleBoost = IntSampleBoost * 2
         if (hard_bispectrum) IntSampleBoost = IntSampleBoost * 2

@@ -131,4 +131,6 @@ endif
 DEBUGFLAGS ?= FFLAGS
 Debug: FFLAGS=$(DEBUGFLAGS)
 
-include ./Makefile_main
+#MODIFIED P(K)
+include ./Makefile_main_modpk
+#END MODIFIED P(K)

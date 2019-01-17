@@ -327,7 +327,7 @@ getdist: directories $(DISTFILES)
 
 camb:
 	cd ../camb && \
-	$(MAKE) --file=Makefile_main libcamb OUTPUT_DIR=$(OUTPUT_DIR) \
+	$(MAKE) --file=Makefile_main_modpk libcamb OUTPUT_DIR=$(OUTPUT_DIR) \
 	RECOMBINATION=$(RECOMBINATION) EQUATIONS=equations_ppf NONLINEAR=halofit_ppf
 
 polychord:

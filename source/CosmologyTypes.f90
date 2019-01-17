@@ -3,19 +3,31 @@
     use likelihood
     use GeneralTypes
     use ObjectLists
+!MODIFIED P(K)
+    use modpkparams, only : max_vparams
+!END MODIFIED P(K)
     implicit none
 
     integer, parameter :: derived_age=1, derived_zstar=2, derived_rstar=3, derived_thetastar=4, derived_DAstar = 5, &
         derived_zdrag=6, derived_rdrag=7,derived_kD=8,derived_thetaD=9, derived_zEQ =10, derived_keq =11, &
         derived_thetaEQ=12, derived_theta_rs_EQ = 13 !index in derived parameters array
 
-    integer, parameter :: As_index=1, ns_index =2, nrun_index=3, nrunrun_index=4, amp_ratio_index = 5, &
-        & nt_index= 6, ntrun_index = 7, Aphiphi_index = 8, last_power_index = Aphiphi_index
+!MODIFIED P(K)
+    ! This adds N_pivot and vparams(1:max_vparams) to the semi-slow parameters
 
-    integer, parameter :: max_inipower_params = 10
+    integer, parameter :: As_index=1, ns_index =2, nrun_index=3, nrunrun_index=4, amp_ratio_index = 5, &
+        & nt_index= 6, ntrun_index = 7, Aphiphi_index = 8, &
+        & N_pivot_index = 9, vparams_index_first = 10, vparams_index_last = vparams_index_first+max_vparams-1, &
+        & last_power_index = vparams_index_last
+
+    ! have to increase this by 1+20 due to N_pivot and vparams(1:max_vparams)
+    integer, parameter :: max_inipower_params = 31
+!END MODIFIED P(K)
 
     real(mcp), parameter :: cl_norm = 1e-10_mcp !units for As
-    integer, parameter :: max_derived_parameters = 30
+!MODIFIED P(K)
+    integer, parameter :: max_derived_parameters = 100
+!END MODIFIED P(K)
 
     integer :: num_hard, num_initpower
     integer :: index_initpower
@@ -62,6 +74,27 @@
         real(mcp) :: tensor_pivot_k = 0.05_mcp !Point for defining tensor power spectra
         logical :: inflation_consistency = .true. !fix n_T or not
 
+!MODIFIED P(K)
+        logical :: use_modpk                        ! use the modified P(K) code?
+        logical :: modpk_physical_priors            ! use physical priors?
+        logical :: instreheat                       ! instant reheating?
+        logical :: slowroll_infl_end                ! carry integration through to the end?
+        logical :: vnderivs                         !
+
+        integer :: potential_choice                 ! which potential to choose     
+        integer :: num_knots                        ! number of potential reconstruction knots
+                                                    
+        ! cosmomc versions of modpk variables
+        real(mcp) :: phi_init                       ! phi to set initial conditions
+        real(mcp) :: phi_infl_end                   ! phi to end inflation
+        real(mcp) :: k_pivot                        ! pivot scale wavevector
+        real(mcp) :: modpk_rho_reheat               !
+        real(mcp) :: modpk_w_primordial_lower       !
+        real(mcp) :: modpk_w_primordial_upper       !
+        real(mcp) :: reconstruction_Nefold_limit    ! 
+        real(mcp) :: k_max                          ! max wavevector to calculate P(K)
+        real(mcp) :: k_min                          ! min wavevector to calculate P(K) 
+!END MODIFIED P(K)
         logical :: bbn_consistency = .true. !JH
 
         integer :: num_massive_neutrinos = -1 !if neutrino_hierarcy_degenerate, number of massive degenerate eigenstates
@@ -198,6 +231,27 @@
     call Ini%Read('lmin_store_all_cmb',this%lmin_store_all_cmb)
     call Ini%Read('lmax_tensor',this%lmax_tensor)
 
+!MODIFIED P(K)
+    this%use_modpk = Ini%Read_Logical('use_modpk',.true.)
+    this%potential_choice = Ini%Read_Int('potential_choice',1)
+    this%num_knots = Ini%Read_Int('num_knots',1)
+    this%reconstruction_Nefold_limit = Ini%Read_Double('reconstruction_Nefold_limit',20.d0)
+    this%vnderivs = Ini%Read_Logical('vnderivs',.true.)
+    this%phi_init = Ini%Read_Double('phi_init',17.d0)
+    this%slowroll_infl_end = Ini%Read_Logical('slowroll_infl_end',.true.)
+    this%phi_infl_end = Ini%Read_Double('phi_infl_end',0.d0)
+    this%instreheat = Ini%Read_Logical('instreheat',.false.)
+    this%k_pivot = Ini%Read_Double('infl_pivot_k',0.05d0)
+    this%k_min = Ini%Read_Double('infl_min_k',1.d-5)
+    this%k_max = Ini%Read_Double('infl_max_k',5.d0)
+
+    this%modpk_physical_priors = Ini%Read_Logical('modpk_physical_priors',.false.)
+    if (this%modpk_physical_priors) then 
+        this%modpk_rho_reheat = Ini%Read_Double('modpk_rho_reheat',1.d0) !units are GeV^4
+        this%modpk_w_primordial_lower = Ini%Read_Double('modpk_w_primordial_lower',-0.333333d0)
+        this%modpk_w_primordial_upper = Ini%Read_Double('modpk_w_primordial_upper',1.d0)
+    endif
+!END MODIFIED P(K)
     end subroutine TCosmoTheorySettings_ReadParams
 
 

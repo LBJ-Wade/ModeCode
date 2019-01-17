@@ -219,7 +219,24 @@
         derived(12) = Theory%derived_parameters( derived_rdrag )*CMB%H0/100
         derived(13) = Theory%Lensing_rms_deflect
         derived(14) = CMB%zre
-        ix=15
+!MODIFIED P(K)
+        derived(15) = Theory%modpk_N_pivot
+
+        derived(16) = Theory%modpk_ns
+        derived(17) = Theory%modpk_nt
+        derived(18) = Theory%modpk_nrun
+        derived(19) = log(1.d10*Theory%modpk_As)
+        derived(20) = Theory%modpk_r
+
+        derived(21) = Theory%modpk_ns002
+        derived(22) = Theory%modpk_nt002
+        derived(23) = Theory%modpk_nrun002
+        derived(24) = log(1.d10*Theory%modpk_As002)
+        derived(25) = Theory%modpk_r002
+
+        derived(26) = Theory%modpk_w
+        ix=27
+!END MODIFIED P(K)
         derived(ix) = cl_norm*CMB%InitPower(As_index)*1e9
         derived(ix+1) = derived(ix)*exp(-2*CMB%tau)  !A e^{-2 tau}
         ix = ix+2

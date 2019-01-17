@@ -13,6 +13,9 @@
     use constants
     use Bispectrum
     use CAMBmain
+!MODIFIED P(K)
+	use modpkparams, only : use_modpk, vnderivs
+!END MODIFIED P(K)
     use NonLinear
 #ifdef NAGF95
     use F90_UNIX
@@ -311,6 +314,20 @@
     else
         lSampleBoost   = Ini_Read_Double('l_sample_boost',lSampleBoost)
     end if
+!MODIFIED P(K)
+
+    if (FeedbackLevel > 0) then
+        if (use_modpk) then
+            write(*,*) 'Using modified initial power spectrum.'
+            if (vnderivs) write(*,*) 'Computing potential derivatives numerically.'
+        end if
+    end if
+
+    if (FeedbackLevel > 0) then
+        write (*,*)'primordial power spectra is: ',Power_Name
+    endif
+
+!END MODIFIED P(K)
     if (outroot /= '') then
         if (InputFile /= trim(outroot) //'params.ini') then
             call Ini_SaveReadValues(trim(outroot) //'params.ini',1)

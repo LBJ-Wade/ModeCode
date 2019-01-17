@@ -11,6 +11,16 @@
         Transfer_SortAndIndexRedshifts,  &
         Recombination_Name, reionization_name, power_name, threadnum, version, tensor_param_rpivot
     use Errors !CAMB
+!MODIFIED P(K)
+    use modpkparams, only : use_modpk, modpk_physical_priors, vnderivs, instreheat, &
+    modpk_rho_reheat, modpk_w_primordial_lower, modpk_w_primordial_upper, &
+    potential_choice,num_knots, k_pivot, N_pivot, vparams, slowroll_infl_end, &
+    phi_init0, phi_infl_end, &
+    modpk_ns, modpk_nt, modpk_nrun, modpk_As, modpk_r, modpk_w, &
+    modpk_ns002, modpk_nt002, modpk_nrun002, modpk_As002, modpk_r002, modpk_w, &
+    reconstruction_Nefold_limit,max_vparams
+    use camb_interface, only: modpkoutput
+!END MODIFIED P(K)
     use settings
     use likelihood
     use Calculator_Cosmology
@@ -170,6 +180,9 @@
     end subroutine CAMBCalc_SetBackgroundTheoryData
 
     subroutine CAMBCalc_GetNewTransferData(this, CMB,Info,Theory,error)
+!MODIFIED P(K)
+    use camb_interface, only : pk_bad
+!END MODIFIED P(K)
     use InitialPower
     class(CAMB_Calculator) :: this
     class(CMBParams) CMB
@@ -198,6 +211,9 @@
     if (error==0) then
         call this%SetDerived(Theory)
     else
+!MODIFIED P(K)
+        if (CosmoSettings%use_modpk .and. pk_bad /=0 .and. Feedback >1 ) write(*,'( "WARNING, error in CAMB_GetTransfers: pk_bad=", I3 )') pk_bad
+!END MODIFIED P(K)
         if (stop_on_error) call MpiStop('CAMB error '//trim(global_error_message))
         if (Feedback > 1) write(*,*) 'CAMB returned error '//trim(global_error_message)
         this%nerrors=this%nerrors+1
@@ -211,6 +227,9 @@
     end subroutine CAMBCalc_GetNewTransferData
 
     subroutine CAMBCalc_GetNewPowerData(this, CMB, Info, Theory, error)
+!MODIFIED P(K)
+    use camb_interface, only : pk_bad
+!END MODIFIED P(K)
     class(CAMB_Calculator) :: this
     class(CMBParams) :: CMB
     class(TTheoryIntermediateCache), pointer :: Info
@@ -224,6 +243,9 @@
         !this sets slow CAMB params correctly from value stored in Transfers
         if (global_error_flag/=0) then
             error=global_error_flag
+!MODIFIED P(K)
+            if (CosmoSettings%use_modpk .and. pk_bad /=0 .and. Feedback >1 ) write(*,'( "WARNING, error in CAMB_GetTransfers: pk_bad=", I3 )') pk_bad
+!END MODIFIED P(K)
             return
         end if
         !JD 08/13 added so we dont have to fill Cls unless using CMB
@@ -440,6 +462,25 @@
         Theory%tensor_ratio_C10 = 0
         Theory%tensor_AT = 0
     end if
+!MODIFIED P(K)
+    if(CosmoSettings%use_modpk) then
+        Theory%modpk_N_pivot= N_pivot
+
+        Theory%modpk_ns     = modpk_ns
+        Theory%modpk_nt     = modpk_nt
+        Theory%modpk_nrun   = modpk_nrun
+        Theory%modpk_As     = modpk_As
+        Theory%modpk_r      = modpk_r
+
+        Theory%modpk_ns002   = modpk_ns002
+        Theory%modpk_nt002   = modpk_nt002
+        Theory%modpk_nrun002 = modpk_nrun002
+        Theory%modpk_As002   = modpk_As002
+        Theory%modpk_r002    = modpk_r002
+
+        Theory%modpk_w      = modpk_w
+    end if
+!END MODIFIED P(K)    
 
     end subroutine CAMBCalc_SetPowersFromCAMB
 
@@ -719,6 +760,31 @@
     Threadnum =num_threads
     w_lam = -1
     wa_ppf = 0._dl
+!MODIFIED P(K)
+    use_modpk = CosmoSettings%use_modpk
+
+    if (use_modpk) then
+
+       potential_choice            = CosmoSettings%potential_choice
+       num_knots                   = CosmoSettings%num_knots           
+       reconstruction_Nefold_limit = CosmoSettings%reconstruction_Nefold_limit
+       vnderivs                    = CosmoSettings%vnderivs
+       phi_init0                   = CosmoSettings%phi_init
+       slowroll_infl_end           = CosmoSettings%slowroll_infl_end
+       phi_infl_end                = CosmoSettings%phi_infl_end
+       instreheat                  = CosmoSettings%instreheat
+       k_pivot                     = CosmoSettings%k_pivot
+
+       modpk_physical_priors       = CosmoSettings%modpk_physical_priors
+
+       if (modpk_physical_priors) then 
+          modpk_rho_reheat         = CosmoSettings%modpk_rho_reheat
+          modpk_w_primordial_lower = CosmoSettings%modpk_w_primordial_lower
+          modpk_w_primordial_upper = CosmoSettings%modpk_w_primordial_upper
+       endif
+
+    end if
+!END MODIFIED P(K)
     call CAMB_SetDefParams(P)
 
     HighAccuracyDefault = .true.
@@ -823,7 +889,12 @@
     class(CMBParams) CMB
     integer, intent(in) :: ix
 
-    if (Power_Name == 'power_tilt') then
+!MODIFIED P(K)
+    if (Power_Name == 'power_tilt' .or. Power_Name == 'power_tilt_modpk') then
+        N_pivot = CMB%InitPower(N_pivot_index)
+        vparams(1:max_vparams) = CMB%InitPower(vparams_index_first:vparams_index_last)
+        modpkoutput = (feedback > 1) 
+!END MODIFIED P(K)
         P%InitPower%k_0_scalar = CosmoSettings%pivot_k
         P%InitPower%k_0_tensor = CosmoSettings%tensor_pivot_k
         if (P%InitPower%k_0_tensor/=P%InitPower%k_0_scalar) P%InitPower%tensor_parameterization = tensor_param_rpivot
