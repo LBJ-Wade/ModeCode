@@ -105,9 +105,9 @@ CONTAINS
 
        if (phi_init_min.ne.0.0 .and. abs(1.d0 - phi_init_max/phi_init_min) < 1.d-10) then
            if (modpkoutput) then 
-              write (*,*), 'MODPK: phi_min too close to phi_max'
-              write (*,*), 'MODPK: could not find initial phi'
-              write (*,*), 'MODPK: vparams = ', vparams
+              write (*,*) 'MODPK: phi_min too close to phi_max'
+              write (*,*) 'MODPK: could not find initial phi'
+              write (*,*) 'MODPK: vparams = ', vparams
            endif
            pk_bad = 13
            return
@@ -116,8 +116,8 @@ CONTAINS
           
        if (count_trials > 5000) then
           if (modpkoutput) then
-             write (*,*), 'MODPK: could not find initial phi'
-             write (*,*), 'MODPK: vparams = ', vparams
+             write (*,*) 'MODPK: could not find initial phi'
+             write (*,*) 'MODPK: vparams = ', vparams
           end if
           pk_bad=12
           return
