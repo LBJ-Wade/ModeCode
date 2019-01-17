@@ -284,7 +284,6 @@
     end function Reionization_GetOptDepth
 
     subroutine Reionization_zreFromOptDepth(Reion, ReionHist)
-    use errors
     !General routine to find zre parameter given optical depth
     use Errors
     Type(ReionizationParams) :: Reion
