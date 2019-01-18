@@ -55,8 +55,8 @@ else
 #gfortran 6 should work
 #see CosmoBox virtual machines for stable environments
 F90C = gfortran
-FFLAGS = -cpp -O3 -ffast-math -ffree-line-length-none -fopenmp -fmax-errors=4
-DEBUGFLAGS = -cpp -g -fbounds-check -fbacktrace -ffree-line-length-none -fopenmp -fmax-errors=4 -ffpe-trap=invalid,overflow,zero
+FFLAGS = -cpp -O3 -ffast-math -ffree-line-length-none -fmax-errors=4
+DEBUGFLAGS = -cpp -g -fbounds-check -fbacktrace -ffree-line-length-none -fmax-errors=4 -ffpe-trap=invalid,overflow,zero
 MODOUT =  -J$(OUTPUT_DIR)
 #LAPACKL = -Wl,-framework -Wl,accelerate
 #commented above is (I think) for Mac; this is standard linux (sudo apt-get install liblapack-dev)
@@ -71,6 +71,7 @@ endif
 endif
 
 MPIF90C ?= mpif90
+DEBUGFLAGS +=   -fcheck=all -ggdb 
 
 
 #use "make RECOMBINATION=cosmorec" to build with CosmoRec rather than RECFAST default
