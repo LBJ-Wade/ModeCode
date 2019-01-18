@@ -14,8 +14,8 @@ INTEGER*4, PARAMETER, PUBLIC :: pkspline_n = 5000
   INTEGER*4, PARAMETER, PUBLIC :: pkspline_n = 500
 #endif
 
-  REAL*8, PUBLIC :: pkspline_kmin = log(1.d-5), pkspline_kmax = log(5.d0)
-  REAL*8, PUBLIC :: pkspline_k(pkspline_n), pkspline_p(pkspline_n), &
+  double precision, PUBLIC :: pkspline_kmin = log(1.d-5), pkspline_kmax = log(5.d0)
+  double precision, PUBLIC :: pkspline_k(pkspline_n), pkspline_p(pkspline_n), &
 	pkspline_p2der(pkspline_n), pkspline_pt(pkspline_n), &
 	pkspline_pt2der(pkspline_n)
 
@@ -30,9 +30,9 @@ CONTAINS
     USE internals, ONLY : PI
     IMPLICIT NONE
 
-    REAL*8 :: k,klo,khi
-    REAL*8 :: c,gamma,A_s
-    REAL*8 :: ps, pt
+    double precision :: k,klo,khi
+    double precision :: c,gamma,A_s
+    double precision :: ps, pt
 
 
     if(potential_choice.eq.10.or.potential_choice.eq.13) then ! monodromy
@@ -105,13 +105,13 @@ CONTAINS
     IMPLICIT NONE
     INTEGER*4, PARAMETER :: NVAR=10
     INTEGER*4 :: i,j
-    REAL*8 :: accuracy,h1,hmin,x1,x2 
-    REAL*8, DIMENSION(NVAR) :: y 
-    REAL*8, INTENT(IN) :: kin
-    REAL*8, INTENT(OUT) :: pow, powt
-    REAL*8 :: dum,ah,alpha_ik,dalpha,dh,p_ik,delp,dp_ik,deldp
-    REAL*8 :: A1,A2,A3
-    REAL*8 :: eps
+    double precision :: accuracy,h1,hmin,x1,x2 
+    double precision, DIMENSION(NVAR) :: y 
+    double precision, INTENT(IN) :: kin
+    double precision, INTENT(OUT) :: pow, powt
+    double precision :: dum,ah,alpha_ik,dalpha,dh,p_ik,delp,dp_ik,deldp
+    double precision :: A1,A2,A3
+    double precision :: eps
     !
     !     Set initial conditions
     !
